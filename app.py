@@ -3,6 +3,7 @@ import streamlit as st
 st.markdown("""
     <style>
     h1 { font-size: 34px !important; font-weight: bold; color: #1B5E20; }
+    .sub-title { font-size: 24px !important; color: #555555; margin-bottom: 20px; }
     .q-font { font-size: 24px !important; font-weight: bold; margin-top: 25px; color: #222222; }
     .result-title { font-size: 28px !important; color: #0D47A1; font-weight: bold; }
     .food-box { background-color: #F1F8E9; padding: 25px; border-radius: 12px; border-left: 6px solid #4CAF50; }
@@ -12,10 +13,13 @@ st.markdown("""
         font-weight: 500 !important;
         line-height: 1.5 !important;
     }
-    div.stButton > button {
-        font-size: 24px !important;
+    
+    div.stButton > button p {
+        font-size: 26px !important;
         font-weight: bold !important;
-        padding: 12px 30px !important;
+    }
+    div.stButton > button {
+        padding: 15px 30px !important;
         width: 100% !important;
         border-radius: 8px !important;
     }
@@ -23,7 +27,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("어르신 맞춤형 영양식품 추천")
-st.write("나이, 만성질환, 저작능력을 조합하여 어르신께 최적의 음식을 제안합니다!")
+st.markdown('<p class="sub-title">나이, 만성질환, 저작능력을 조합하여 어르신께 최적의 음식을 제안합니다!</p>', unsafe_allow_html=True)
 st.write("---")
 
 st.markdown('<p class="q-font">1. 귀하의 연령대는 어떻게 되십니까?</p>', unsafe_allow_html=True)
