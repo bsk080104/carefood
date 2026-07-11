@@ -1,12 +1,24 @@
 import streamlit as st
 
-# 어르신 맞춤형 큼직한 디자인 스타일 설정
 st.markdown("""
     <style>
     h1 { font-size: 34px !important; font-weight: bold; color: #1B5E20; }
     .q-font { font-size: 24px !important; font-weight: bold; margin-top: 25px; color: #222222; }
     .result-title { font-size: 28px !important; color: #0D47A1; font-weight: bold; }
     .food-box { background-color: #F1F8E9; padding: 25px; border-radius: 12px; border-left: 6px solid #4CAF50; }
+    
+    .stCheckbox label p, .stRadio label p {
+        font-size: 22px !important;
+        font-weight: 500 !important;
+        line-height: 1.5 !important;
+    }
+    div.stButton > button {
+        font-size: 24px !important;
+        font-weight: bold !important;
+        padding: 12px 30px !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -14,11 +26,9 @@ st.title("어르신 맞춤형 영양식품 추천")
 st.write("나이, 만성질환, 저작능력을 조합하여 어르신께 최적의 음식을 제안합니다!")
 st.write("---")
 
-# 1. 연령대 입력
 st.markdown('<p class="q-font">1. 귀하의 연령대는 어떻게 되십니까?</p>', unsafe_allow_html=True)
 age = st.radio("연령 선택", ["60대", "70대", "80대 이상"], index=0)
 
-# 2. 만성 질환 입력
 st.markdown('<p class="q-font">2. 현재 관리 중이거나 신경 쓰이시는 질환이 있으신가요? (복수 선택 가능)</p>', unsafe_allow_html=True)
 col1, col2 = st.columns(2)
 with col1:
@@ -29,7 +39,6 @@ with col2:
     joints = st.checkbox("관절염/골다공증")
 no_disease = st.checkbox("없음")
 
-# 3. 저작 능력 입력
 st.markdown('<p class="q-font">3. 평소 음식을 드실 때 씹거나 삼키는 데 어려움이 있으신가요?</p>', unsafe_allow_html=True)
 chew = st.radio("식감 선호도 선택", [
     "딱딱한 과일이나 고기도 잘 씹을 수 있음",
@@ -42,8 +51,7 @@ st.write("---")
 
 if st.button("맞춤 식품 추천 결과 보기"):
     st.markdown('<p class="result-title">분석 결과</p>', unsafe_allow_html=True)
-    
-    # [나이 계산 변수]
+
     protein_spek = ""
     if "60대" in age:
         protein_spek = "한 끼 단백질 15g"
@@ -52,10 +60,9 @@ if st.button("맞춤 식품 추천 결과 보기"):
     else:
         protein_spek = "한 끼 단백질 25g 이상 필수"
 
-    # [질환 계산 변수]
     selected_diseases = []
     nutrients_needed = []
-    
+
     if no_disease or not (bp or sugar_dis or lipids or joints):
         selected_diseases.append("일반 건강군")
         nutrients_needed.append("기력 회복 및 노화 방지를 위한 5대 영양소 균형 지키기")
@@ -75,55 +82,50 @@ if st.button("맞춤 식품 추천 결과 보기"):
 
     disease_count = len(selected_diseases) if "일반 건강군" not in selected_diseases else 0
 
-    # ------------------ [ 메뉴판 매칭 구간 ] ------------------
-    
-    # ① 일반식 선택 시
     if "딱딱한 과일이나 고기도 잘 씹을 수 있음" in chew:
         texture_grade = "일반 식품 섭취 가능"
         if disease_count >= 2:
-            food_recommend = "복합질환용 일반식"
+            food_recommend = "현미 잡곡밥과 두부, 버섯 반찬"
         elif bp:
-            food_recommend = "고혈압용 일반식"
+            food_recommend = "다시마로 육수를 낸 소고기 무국"
         elif sugar_dis:
-            food_recommend = "당뇨용 일반식"
+            food_recommend = "현미 잡곡밥과 돼지고기 수육"
         elif lipids:
-            food_recommend = "고지혈증용 일반식"
+            food_recommend = "고등어 시래기 조림"
         elif joints:
-            food_recommend = "관절염/골다공증용 일반식"
+            food_recommend = "멸치로 육수를 낸 뼈없는 감자탕"
         else:
-            food_recommend = "건강군용 일반식"
+            food_recommend = "버섯 불고기 볶음밥"
 
-    # ② 연화식 선택 시
     elif "부드러운 고기나 나물류 선호" in chew:
         texture_grade = "연화식 위주 식단 필요"
         if disease_count >= 2:
-            food_recommend = "복합질환용 연화식"
+            food_recommend = "기름기를 뺀 닭안심 찜"
         elif bp:
-            food_recommend = "고혈압용 연화식"
+            food_recommend = "들깨 소스를 얹은 삼치구이"
         elif sugar_dis:
-            food_recommend = "당뇨용 연화식"
+            food_recommend = "으깬 단호박을 얹은 닭가슴살 샐러드"
         elif lipids:
-            food_recommend = "고지혈증용 연화식"
+            food_recommend = "토마토 소스를 얹은 삼치 찜"
         elif joints:
-            food_recommend = "관절염/골다공증용 연화식"
+            food_recommend = "으깬 브로콜리에 치즈를 얹은 감자조림"
         else:
-            food_recommend = "건강군용 연화식"
+            food_recommend = "부드러운 계란을 넣은 찜"
 
-    # ③ 유동식 선택 시
     else:
         texture_grade = "액체류 식단 필요"
         if disease_count >= 2:
-            food_recommend = "복합질환용 유동식(죽/미음)"
+            food_recommend = "소금을 빼고 들깨가루를 넣은 단호박 죽"
         elif bp:
-            food_recommend = "고혈압용 유동식(죽/미음)"
+            food_recommend = "소금을 넣지 않은 표고버섯 야채죽"
         elif sugar_dis:
-            food_recommend = "당뇨용 유동식(죽/미음)"
+            food_recommend = "통귀리를 넣은 소고기 죽"
         elif lipids:
-            food_recommend = "고지혈증용 유동식(죽/미음)"
+            food_recommend = "들깨와 대두 가루를 넣은 버섯죽"
         elif joints:
-            food_recommend = "관절염/골다공증용 유동식(죽/미음)"
+            food_recommend = "검은콩 and 흑임자를 갈아넣은 죽"
         else:
-            food_recommend = "건강군용 유동식(죽/미음)"
+            food_recommend = "소고기를 갈아넣은 전복죽"
 
     st.markdown(f"""
     <div class="food-box">
